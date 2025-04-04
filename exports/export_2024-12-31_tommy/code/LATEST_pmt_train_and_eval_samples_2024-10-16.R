@@ -1,8 +1,10 @@
 library(data.table) # 1.15.4 on CBS server
 library(tidyverse) # 2.0.0 on CBS server
 
-train_path <- "H:/DATASETS/train.csv"
+train_path <- "H:/stork_oracle/data/train.csv"
+holdout_path <- "H:/stork_oracle/data/holdout_final_leaderboard.csv"
 prefer_train_and_eval <- fread(train_path, colClasses = c(RINPERSOON = "character"))
+holdout <- fread(holdout_path, colClasses = c(RINPERSOON = "character"))
 
 # NOTE: The official PreFer file, "train.csv", has a column "evaluation_set" 
 # indicating 10% of cases that can be used as evaluation data. 
@@ -217,10 +219,37 @@ edit_and_save_sample_df <- function(seed) {
   pmt_train_samples <- create_sample_indicators(df = prefer_train_and_eval,
                                                 vector_of_sample_sizes = train_sample_sizes, 
                                                 sample_from = "train")
+  
+  sum_check <- as.numeric(colSums(dplyr::select(pmt_train_samples, contains("^train_sample_"))))
+  assertthat::assert_that(all(sum_check[order(sum_check)] == train_sample_sizes[order(train_sample_sizes)]),
+                          msg = paste0("The train sample sizes do not match the expected values for seed ", seed))
+  
   pmt_train_and_eval_samples <- create_sample_indicators(df = pmt_train_samples,
                                                          vector_of_sample_sizes = eval_sample_sizes, 
                                                          sample_from = "evaluation")
+  
+  sum_check <- as.numeric(colSums(dplyr::select(pmt_train_and_eval_samples, contains("^evaluation_sample_"))))
+  assertthat::assert_that(all(sum_check[order(sum_check)] == eval_sample_sizes[order(eval_sample_sizes)]),
+                          msg = paste0("The evaluation sample sizes do not match the expected values for seed ", seed))
+  
   check_output_of_create_sample_indicators(pmt_train_and_eval_samples)
+  
+  # Add holdout set
+  assertthat::assert_that(!any(holdout$RINPERSOON %in% pmt_train_and_eval_samples$RINPERSOON),
+                          msg = paste0("The holdout set contains RINPERSOON values that are also in the training and evaluation set for seed ", seed))
+  
+  assertthat::assert_that(!any(is.na(pmt_train_and_eval_samples)),
+                          msg = paste0("There are NAs in the train and eval samples", seed))
+  
+  # Combine pmt_train_and_eval_samples and holdout with only RINPERSOON column, filling rest with NAs
+  pmt_train_and_eval_samples <- bind_rows(pmt_train_and_eval_samples, select(holdout, RINPERSOON))
+  
+  # Check that we indeed filled NAs exactly equal to the holdout set size
+  assertthat::assert_that(sum(is.na(pmt_train_and_eval_samples)) ==
+                          (nrow(holdout) * ncol(pmt_train_and_eval_samples) - 1),
+                          msg = paste0("The number of NAs in the train and eval samples does not match the size of the binded holdout set for seed ", seed))
+  
+  pmt_train_and_eval_samples[is.na(pmt_train_and_eval_samples)] <- 0
   
   # Save results 
   file_name <- paste0("pmt_train_and_evaluation_samples_seed_", seed, ".csv")

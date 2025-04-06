@@ -242,17 +242,24 @@ edit_and_save_sample_df <- function(seed) {
                           msg = paste0("There are NAs in the train and eval samples", seed))
   
   # Combine pmt_train_and_eval_samples and holdout with only RINPERSOON column, filling rest with NAs
-  pmt_train_and_eval_samples <- bind_rows(pmt_train_and_eval_samples, select(holdout, RINPERSOON))
+  pmt_train_and_eval_samples <- pmt_train_and_eval_samples %>%
+    mutate(official_holdout_set = 0)
+  
+  holdout <- holdout %>%
+    mutate(official_holdout_set = 1)
+  
+  pmt_train_and_eval_samples <- bind_rows(
+    pmt_train_and_eval_samples, select(holdout, RINPERSOON, official_holdout_set))
   
   # Check that we indeed filled NAs exactly equal to the holdout set size
   assertthat::assert_that(sum(is.na(pmt_train_and_eval_samples)) ==
-                          (nrow(holdout) * ncol(pmt_train_and_eval_samples) - 1),
+                          (nrow(holdout) * (ncol(pmt_train_and_eval_samples) - 2)),
                           msg = paste0("The number of NAs in the train and eval samples does not match the size of the binded holdout set for seed ", seed))
   
   pmt_train_and_eval_samples[is.na(pmt_train_and_eval_samples)] <- 0
   
   # Save results 
-  file_name <- paste0("pmt_train_and_evaluation_samples_seed_", seed, ".csv")
+  file_name <- paste0("pmt_train_and_evaluation_samples_seed_", seed, "_241016_with_holdout.csv")
   pmt_samples_path_to_write <- paste0("H:/pmt/eval/train_and_eval_samples/", file_name)
   fwrite(pmt_train_and_eval_samples, pmt_samples_path_to_write)
   print(paste0("Data file with samples generated from seed ", seed, " has been saved."))

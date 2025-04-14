@@ -149,8 +149,7 @@ metrics_for_all_pipelines <- c("LogLoss", "MSE", "In_Sample_R2", "R2_Holdout", "
 metrics_for_selecting_pipelines <- c("LogLoss")
 metrics_for_winning_pipelines <- c("F1_Score", "Accuracy") # F1_Score
 threshold_increment <- .01
-n_bootstrap <- 2000 # A very small number because we are not really interested
-# in confidence intervals for this submission
+n_bootstrap <- 2000
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_topic_areas_2025-01-29.csv"
+results_path <- "results_cumulative_topics_2025-04-14.csv"

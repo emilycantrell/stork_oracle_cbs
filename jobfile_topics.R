@@ -25,12 +25,17 @@ feature_set_settings <- list(
 )
 
 # Train-test splits 
-sampling_files <- c("pmt_train_and_evaluation_samples_seed_1_241016.csv")
+sampling_files <- c("pmt_train_and_evaluation_samples_seed_1_241016_with_holdout.csv")
 data_splits <- bind_rows(
   expand_grid(
-    training_sets = c("train_sample_n_100000"),
+    training_sets = c("train_sample_n_1000",
+                      "train_sample_n_10000",
+                      "train_sample_n_100000",
+                      "train_sample_n_1000000",
+                      "training_set"),
     selection_sets = c("evaluation_selection_50_percent_split"), # Evaluation sets we use to select the best pipelines
-    test_sets = c("evaluation_test_50_percent_split") # Evaluation sets we use for holdout evaluations.
+    test_sets = c("evaluation_test_50_percent_split",
+                  "official_holdout_set") # Evaluation sets we use for holdout evaluations.
   )
 )
 
@@ -74,10 +79,9 @@ n_grid_row <- 1 # how many hyperparameter combinations to sample from expanded
 # Performance metrics
 metrics_for_all_pipelines <- c("LogLoss", "MSE", "In_Sample_R2", "R2_Holdout", "AUC") # Deciles_for_Calibration
 metrics_for_selecting_pipelines <- c("LogLoss")
-metrics_for_winning_pipelines <- c("F1_Score") # F1_Score
+metrics_for_winning_pipelines <- c("F1_Score", "Accuracy") # F1_Score
 threshold_increment <- .01
-n_bootstrap <- 2 # A very small number because we are not really interested
-# in confidence intervals for this submission
+n_bootstrap <- 2000
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_topics.csv"
+results_path <- "results_topics_2025-04-14.csv"

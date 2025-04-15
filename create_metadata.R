@@ -293,9 +293,43 @@ metadata <- metadata %>%
 # Note: some of the "partner" age/sex variables which appear to be duplicates of each other are not  
 # duplicates, as some refer only to registered partners, while other refer to all cohabiting partners. 
 
-
-
-
-
-
-
+#### "Demography 101" feature set ####
+demography_101 <- c("ego_age", "GBAGESLACHT", 
+                    "has_partner", "AANTALKINDHH", 
+                    "live_in_partner_age", "live_in_partner_GBAGESLACHT",
+                    # Note to Mark: you can copy-paste the feature names below from the section on line 208
+                    "age_household_child_1",
+                    "age_household_child_2",
+                    "age_household_child_3",
+                    "age_household_child_4",
+                    "age_household_child_5",
+                    "age_household_child_6",
+                    "age_household_child_7",
+                    "age_household_child_8",
+                    "age_household_child_9",
+                    "age_household_child_10",
+                    "age_household_child_11",
+                    "age_household_child_12",
+                    "age_household_child_13",
+                    "age_household_child_14",
+                    "age_household_child_15",
+                    "age_household_child_16",
+                    "GBAGESLACHT_household_child_1",
+                    "GBAGESLACHT_household_child_2",
+                    "GBAGESLACHT_household_child_3",
+                    "GBAGESLACHT_household_child_4",
+                    "GBAGESLACHT_household_child_5",
+                    "GBAGESLACHT_household_child_6",
+                    "GBAGESLACHT_household_child_7",
+                    "GBAGESLACHT_household_child_8",
+                    "GBAGESLACHT_household_child_9",
+                    "GBAGESLACHT_household_child_10",
+                    "GBAGESLACHT_household_child_11",
+                    "GBAGESLACHT_household_child_12",
+                    "GBAGESLACHT_household_child_13",
+                    "GBAGESLACHT_household_child_14",
+                    "GBAGESLACHT_household_child_15",
+                    "GBAGESLACHT_household_child_16")
+# Note: age and sex for household children are in "feature_set_child_age_and_sex_by_household"
+metadata <- metadata %>%
+  mutate(feature_set_demography_101 = ifelse(variable_name %in% demography_101, 1, 0))

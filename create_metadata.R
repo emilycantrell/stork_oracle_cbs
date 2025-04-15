@@ -93,7 +93,7 @@ metadata_gbahuishoudensbus <- variable_type_metadata_gbahuishoudensbus %>%
 # This is data about married, registered, or unregistered partners who live in ego's most recent household (end of 2020)
 
 continuous_features <- c("live_in_partner_age", "start_date_of_first_household_with_partner")
-categorical_features <- c("live_in_partner_GBAGESLACHT")
+categorical_features <- c("has_partner", "live_in_partner_GBAGESLACHT")
 variable_type_metadata_live_in_partner_data <- record_variable_types_in_df(data_file = live_in_partner_data)
 metadata_live_in_partner_data <- variable_type_metadata_live_in_partner_data %>%
   mutate(feature_set_live_in_partner = 1)

@@ -37,6 +37,12 @@ rm(features_from_familienetwerktab)
 rm(ego_age)
 gc()
 
+
+# Set "has_partner" to 0 for anyone where has_partner is NA (the current values are only 1 and NA)
+# For catboost, we could have simply left these as NA, but we want the ability to use other model types too, so we're applying this extra step.
+data <- data %>%
+  mutate(has_partner = ifelse(is.na(has_partner), 0, has_partner))
+
 # Use metadata to identify variables types 
 continuous_variables <- metadata %>%
   filter(variable_type == "continuous") %>%

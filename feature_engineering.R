@@ -53,7 +53,17 @@ ego_and_partner_id_linkage <- people_with_partner_place_joined_by_household %>%
   filter(RINPERSOON_ego != RINPERSOON_partner) %>%
   select(RINPERSOON_ego, RINPERSOON_partner)
 
-#### Step 2: When did ego and spouse/registered/unregistered partner start living together? ####
+#### Step 2: Create an indicator of whether ego has a live-in partner ####
+# This is "1" for everyone in the ego_and_partner_id_linkage dataframe. 
+# Later, in preprocessing.R, we will merge this dataframe with data that includes 
+# people who do not have partners, and then we will set has_partner = 0 for those people.
+
+# QUESTION FOR MARK: As stated above, I think this should be 1 for everyone in the dataframe because
+# the dataframe is just people with partners. Could you please confirm whether that's true?
+ego_and_partner_id_linkage <- ego_and_partner_id_linkage %>%
+  mutate(has_partner = ifelse(!is.na(RINPERSOON_partner), 1, 0))
+
+#### Step 3: When did ego and spouse/registered/unregistered partner start living together? ####
 
 partner_train_rinpersoon <- ego_and_partner_id_linkage$RINPERSOON_partner
 
@@ -86,7 +96,7 @@ first_household_where_ego_and_partner_lived_together <- households_where_ego_and
   select(RINPERSOON_ego, start_date_of_first_household_with_partner) %>%
   rename(RINPERSOON = RINPERSOON_ego)
 
-#### Step 3: Get the live-in partner's age and sex ####
+#### Step 4: Get the live-in partner's age and sex ####
 
 # Make dataframe with ID and sex
 # Calculate age at the start of 2021 as if people were born the first day of the month
@@ -102,9 +112,9 @@ live_in_partner_data <- left_join(ego_and_partner_id_linkage,
   rename(live_in_partner_GBAGESLACHT = GBAGESLACHT, 
          live_in_partner_age = age, 
          RINPERSOON = RINPERSOON_ego) %>%
-  select(RINPERSOON, live_in_partner_GBAGESLACHT, live_in_partner_age)
+  select(RINPERSOON, has_partner, live_in_partner_GBAGESLACHT, live_in_partner_age)
 
-#### Step 4: Put age, sex, and date of moving in together in one data frame #### 
+#### Step 5: Put age, sex, and date of moving in together in one data frame #### 
 live_in_partner_data <- left_join(live_in_partner_data, first_household_where_ego_and_partner_lived_together)
 
 print("feature_engineering: creation of data about live-in-partners is complete.")

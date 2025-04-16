@@ -294,10 +294,12 @@ metadata <- metadata %>%
 # duplicates, as some refer only to registered partners, while other refer to all cohabiting partners. 
 
 #### "Demography 101" feature set and associated feature sets ####
+# Note to Mark: you actually don't need to enter this line of code as the 
+# remainder of the edits allows us to have all of demography_101's
+# subcomponents
 demography_101 <- c("ego_age", "GBAGESLACHT", 
                     "has_partner", "AANTALKINDHH", 
                     "live_in_partner_age", "live_in_partner_GBAGESLACHT",
-                    # Note to Mark: you can copy-paste the feature names below from the section on line 208
                     "age_household_child_1",
                     "age_household_child_2",
                     "age_household_child_3",
@@ -330,6 +332,18 @@ demography_101 <- c("ego_age", "GBAGESLACHT",
                     "GBAGESLACHT_household_child_14",
                     "GBAGESLACHT_household_child_15",
                     "GBAGESLACHT_household_child_16")
+
+ego_age <- c("ego_age")
+
+ego_sex <- c("GBAGESLACHT")
+
+has_partner <- c("has_partner")
+
+parity <- c("AANTALKINDHH")
+
+partner_age <- c("live_in_partner_age")
+
+partner_sex <- c("live_in_partner_GBAGESLACHT")
 
 hh_child_ages <- c("age_household_child_1",
                    "age_household_child_2",
@@ -366,6 +380,12 @@ hh_child_sexes <- c("GBAGESLACHT_household_child_1",
                     "GBAGESLACHT_household_child_16")
 
 metadata <- metadata %>%
-  mutate(feature_set_demography_101 = ifelse(variable_name %in% demography_101, 1, 0), 
+  mutate(feature_set_demography_101 = ifelse(variable_name %in% demography_101, 1, 0),
+         ego_age = ifelse(variable_name %in% ego_age, 1, 0),
+         ego_sex = ifelse(variable_name %in% ego_sex, 1, 0),
+         has_partner = ifelse(variable_name %in% has_partner, 1, 0),
+         parity = ifelse(variable_name %in% parity, 1, 0),
+         partner_age = ifelse(variable_name %in% partner_age, 1, 0),
+         partner_sex = ifelse(variable_name %in% partner_sex, 1, 0),
          feature_set_hh_child_ages = ifelse(variable_name %in% hh_child_ages, 1, 0),
          feature_set_hh_child_sexes = ifelse(variable_name %in% hh_child_sexes, 1, 0))

@@ -14,7 +14,8 @@ workers_metric_for_selecting_pipelines <- 3
 # Feature choices
 # NB: make sure to use equal signs here, not arrows
 feature_set_settings <- list(
-  prefer_official_train = c("prefer_official_train")
+  without_leakage = c("GBAPERSOONTAB", "GBAHUISHOUDENSBUS_without_leakage", "prefer_official_train", "FAMILIENETWERKTAB", "live_in_partner"),
+  prefer_official_train = c("prefer_official_train"),
   #FS = c("family_structure"), 
   #IN = c("income_assets_benefits"), 
   #ED = c("education"), 
@@ -79,7 +80,7 @@ feature_set_settings <- list(
   #employment = c("employment"),
   #housing = c("housing"), 
   #childcare = c("childcare_proximity")
-  #ego_AS = c("ego_AS"), 
+  ego_AS = c("ego_AS")
   #ego_partner_AS = c("ego_AS", "partner_AS"), 
   #ego_partner_hhchildren_AS = c("ego_AS", "partner_AS", "child_age_and_sex_by_household")
   #all_plus_LiveInPartner = c("GBAPERSOONTAB", "GBAHUISHOUDENSBUS", "prefer_official_train", "FAMILIENETWERKTAB", "live_in_partner")
@@ -96,12 +97,27 @@ sampling_files <- c("pmt_train_and_evaluation_samples_seed_1_241016_with_holdout
 data_splits <- bind_rows(
   expand_grid(
     training_sets = c("train_sample_n_100",
-                      "train_sample_n_500",
+                      "train_sample_n_200",
+                      "train_sample_n_400",
+                      "train_sample_n_800",
                       "train_sample_n_1000",
+                      "train_sample_n_2000",
+                      "train_sample_n_4000",
+                      "train_sample_n_8000",
                       "train_sample_n_10000",
-                      "train_sample_n_100000"),
+                      "train_sample_n_20000",
+                      "train_sample_n_40000",
+                      "train_sample_n_80000",
+                      "train_sample_n_100000",
+                      "train_sample_n_200000",
+                      "train_sample_n_400000",
+                      "train_sample_n_800000",
+                      "train_sample_n_1000000",
+                      "train_sample_n_2000000",
+                      "train_sample_n_3000000", # Note the 3 here :)
+                      "training_set"),
     selection_sets = c("evaluation_selection_50_percent_split"), # Evaluation sets we use to select the best pipelines
-    test_sets = c("official_holdout_set") # Evaluation sets we use for holdout evaluations.
+    test_sets = c("evaluation_test_50_percent_split", "official_holdout_set") # Evaluation sets we use for holdout evaluations.
   )
 )
 
@@ -151,4 +167,4 @@ n_bootstrap <- 2000 # A very small number because we are not really interested
 # in confidence intervals for this submission
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_sample_size_2025-02-12.csv"
+results_path <- "results_sample_size1_2025-04-16.csv"

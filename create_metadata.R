@@ -294,9 +294,7 @@ metadata <- metadata %>%
 # duplicates, as some refer only to registered partners, while other refer to all cohabiting partners. 
 
 #### "Demography 101" feature set and associated feature sets ####
-# Note to Mark: you actually don't need to enter this line of code as the 
-# remainder of the edits allows us to have all of demography_101's
-# subcomponents
+
 demography_101 <- c("ego_age", "GBAGESLACHT", 
                     "has_partner", "AANTALKINDHH", 
                     "live_in_partner_age", "live_in_partner_GBAGESLACHT",

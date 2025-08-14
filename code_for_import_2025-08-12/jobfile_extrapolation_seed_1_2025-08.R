@@ -21,11 +21,11 @@ feature_set_settings <- list(
 )
 
 # Train-test splits 
-sampling_files <- c("dms_samples_seed_1_subsamples_1",
-                    "dms_samples_seed_1_subsamples_2",
-                    "dms_samples_seed_1_subsamples_3",
-                    "dms_samples_seed_1_subsamples_4",
-                    "dms_samples_seed_1_subsamples_5")
+sampling_files <- c("dms_samples_seed_1_subsamples_1.csv",
+                    "dms_samples_seed_1_subsamples_2.csv",
+                    "dms_samples_seed_1_subsamples_3.csv",
+                    "dms_samples_seed_1_subsamples_4.csv",
+                    "dms_samples_seed_1_subsamples_5.csv")
 data_splits <- bind_rows(
   expand_grid(
     training_sets = c("train_sample_n_100",

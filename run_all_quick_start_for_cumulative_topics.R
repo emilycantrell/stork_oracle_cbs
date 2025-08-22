@@ -3,6 +3,7 @@
 
 setwd("H:/pmt/stork_oracle/stork_oracle_december_2024")
 
+print("Started running the full code:")
 print(Sys.time())
 start <- Sys.time()
 
@@ -52,13 +53,23 @@ data <- mutate(data,
                across(any_of(continuous_variables), as.numeric),
                across(any_of(categorical_variables), as.factor))
 
+print("Finished reading data, starting chunking:")
+print(Sys.time())
+
 ############################################
 
 source("chunking.R")
 
+print("Finished chunking, starting running grid rows:")
+print(Sys.time())
+
 source("run_grid_row.R")
+
+print("Finished running grid rows, starting running metrics for selecting pipelines:")
+print(Sys.time())
 
 source("run_metric_for_selecting_pipelines.R")
 
 Sys.time() - start
 print(Sys.time())
+print("Finished running the full code")

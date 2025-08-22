@@ -90,11 +90,11 @@ n_grid_row <- 1 # how many hyperparameter combinations to sample from expanded
 # grid?
 
 # Performance metrics
-metrics_for_all_pipelines <- c("LogLoss", "MSE", "In_Sample_R2", "R2_Holdout", "AUC") # Deciles_for_Calibration
+metrics_for_all_pipelines <- c("LogLoss", "MSE", "R2_Holdout") # Deciles_for_Calibration
 metrics_for_selecting_pipelines <- c("LogLoss")
 metrics_for_winning_pipelines <- c("F1_Score", "Accuracy") # F1_Score
 threshold_increment <- .01
-n_bootstrap <- 2000 
+n_bootstrap <- 2 
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_extrapolation_seed_1_2025-08.csv"
+results_path <- "results_extrapolation_seed_1_2025-08_no_bootstrap.csv"

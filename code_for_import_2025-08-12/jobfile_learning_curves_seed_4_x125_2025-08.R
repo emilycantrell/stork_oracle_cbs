@@ -21,50 +21,34 @@ feature_set_settings <- list(
 )
 
 # Train-test splits 
-sampling_files <- c("dms_samples_seed_2.csv", 
-                    "dms_samples_seed_3.csv")
+sampling_files <- c("dms_samples_seed_4.csv")
 data_splits <- bind_rows(
   expand_grid(
-    training_sets = c("train_sample_n_100",
-                      "train_sample_n_200",
-                      "train_sample_n_300",
+    training_sets = c("train_sample_n_300",
                       "train_sample_n_400",
-                      "train_sample_n_500",
                       "train_sample_n_600",
                       "train_sample_n_700",
                       "train_sample_n_800",
                       "train_sample_n_900",
-                      "train_sample_n_1000",
-                      "train_sample_n_2000",
                       "train_sample_n_3000",
                       "train_sample_n_4000",
-                      "train_sample_n_5000",
                       "train_sample_n_6000",
                       "train_sample_n_7000",
                       "train_sample_n_8000",
                       "train_sample_n_9000",
-                      "train_sample_n_10000",
-                      "train_sample_n_20000",
                       "train_sample_n_30000",
                       "train_sample_n_40000",
-                      "train_sample_n_50000",
                       "train_sample_n_60000",
                       "train_sample_n_70000",
                       "train_sample_n_80000",
                       "train_sample_n_90000",
-                      "train_sample_n_100000",
-                      "train_sample_n_200000",
                       "train_sample_n_300000",
                       "train_sample_n_400000",
-                      "train_sample_n_500000",
                       "train_sample_n_600000",
                       "train_sample_n_700000",
                       "train_sample_n_800000",
                       "train_sample_n_900000",
-                      "train_sample_n_1000000",
-                      "train_sample_n_2000000",
-                      "train_sample_n_3000000", 
-                      "training_set"),
+                      "train_sample_n_3000000"),
     selection_sets = c("evaluation_selection_50_percent_split"), # Evaluation sets we use to select the best pipelines
     test_sets = c("evaluation_test_50_percent_split", "official_holdout_set") # Evaluation sets we use for holdout evaluations.
   )
@@ -108,11 +92,11 @@ n_grid_row <- 1 # how many hyperparameter combinations to sample from expanded
 # grid?
 
 # Performance metrics
-metrics_for_all_pipelines <- c("LogLoss", "MSE", "In_Sample_R2", "R2_Holdout", "AUC") # Deciles_for_Calibration
+metrics_for_all_pipelines <- c("LogLoss", "MSE", "R2_Holdout") # Deciles_for_Calibration
 metrics_for_selecting_pipelines <- c("LogLoss")
 metrics_for_winning_pipelines <- c("F1_Score", "Accuracy") # F1_Score
 threshold_increment <- .01
-n_bootstrap <- 2000 
+n_bootstrap <- 1000 
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_learning_curves_seeds_2-3_2025-08.csv"
+results_path <- "results_learning_curves_seed_4_x125_2025-08.csv"

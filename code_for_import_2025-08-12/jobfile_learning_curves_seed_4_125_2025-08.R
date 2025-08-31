@@ -14,23 +14,30 @@ workers_metric_for_selecting_pipelines <- 3
 # Feature choices
 # NB: make sure to use equal signs here, not arrows
 feature_set_settings <- list(
-  immigration = c("immigration_ethnicity"),
-  income = c("income_assets_benefits"),
-  education = c("education"),
-  employment = c("employment"),
-  housing = c("housing"),
-  childcare = c("childcare_proximity")
+  without_leakage = c("GBAPERSOONTAB", "GBAHUISHOUDENSBUS_without_leakage", "prefer_official_train", "FAMILIENETWERKTAB", "live_in_partner"),
+  prefer_official_train = c("prefer_official_train"),
+  AS_FS = c("family_age_and_sex_from_prefer_submission", "family_structure"),
+  ego_AS = c("ego_AS")
 )
 
 # Train-test splits 
-sampling_files <- c("dms_samples_seed_2.csv", 
-                    "dms_samples_seed_3.csv")
+sampling_files <- c("dms_samples_seed_4.csv")
 data_splits <- bind_rows(
   expand_grid(
-    training_sets = c("train_sample_n_1000",
+    training_sets = c("train_sample_n_100",
+                      "train_sample_n_200",
+                      "train_sample_n_500",
+                      "train_sample_n_1000",
+                      "train_sample_n_2000",
+                      "train_sample_n_5000",
                       "train_sample_n_10000",
+                      "train_sample_n_20000",
+                      "train_sample_n_50000",
                       "train_sample_n_100000",
+                      "train_sample_n_200000",
+                      "train_sample_n_500000",
                       "train_sample_n_1000000",
+                      "train_sample_n_2000000",
                       "training_set"),
     selection_sets = c("evaluation_selection_50_percent_split"), # Evaluation sets we use to select the best pipelines
     test_sets = c("evaluation_test_50_percent_split", "official_holdout_set") # Evaluation sets we use for holdout evaluations.
@@ -82,4 +89,4 @@ threshold_increment <- .01
 n_bootstrap <- 1000 
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_individual_topics_seeds_2-3_2025-08.csv"
+results_path <- "results_learning_curves_seed_4_125_2025-08.csv"

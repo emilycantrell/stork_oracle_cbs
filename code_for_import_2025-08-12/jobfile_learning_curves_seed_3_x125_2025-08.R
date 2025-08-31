@@ -14,24 +14,41 @@ workers_metric_for_selecting_pipelines <- 3
 # Feature choices
 # NB: make sure to use equal signs here, not arrows
 feature_set_settings <- list(
-  immigration = c("immigration_ethnicity"),
-  income = c("income_assets_benefits"),
-  education = c("education"),
-  employment = c("employment"),
-  housing = c("housing"),
-  childcare = c("childcare_proximity")
+  without_leakage = c("GBAPERSOONTAB", "GBAHUISHOUDENSBUS_without_leakage", "prefer_official_train", "FAMILIENETWERKTAB", "live_in_partner"),
+  prefer_official_train = c("prefer_official_train"),
+  AS_FS = c("family_age_and_sex_from_prefer_submission", "family_structure"),
+  ego_AS = c("ego_AS")
 )
 
 # Train-test splits 
-sampling_files <- c("dms_samples_seed_2.csv", 
-                    "dms_samples_seed_3.csv")
+sampling_files <- c("dms_samples_seed_3.csv")
 data_splits <- bind_rows(
   expand_grid(
-    training_sets = c("train_sample_n_1000",
-                      "train_sample_n_10000",
-                      "train_sample_n_100000",
-                      "train_sample_n_1000000",
-                      "training_set"),
+    training_sets = c("train_sample_n_300",
+                      "train_sample_n_400",
+                      "train_sample_n_600",
+                      "train_sample_n_700",
+                      "train_sample_n_800",
+                      "train_sample_n_900",
+                      "train_sample_n_3000",
+                      "train_sample_n_4000",
+                      "train_sample_n_6000",
+                      "train_sample_n_7000",
+                      "train_sample_n_8000",
+                      "train_sample_n_9000",
+                      "train_sample_n_30000",
+                      "train_sample_n_40000",
+                      "train_sample_n_60000",
+                      "train_sample_n_70000",
+                      "train_sample_n_80000",
+                      "train_sample_n_90000",
+                      "train_sample_n_300000",
+                      "train_sample_n_400000",
+                      "train_sample_n_600000",
+                      "train_sample_n_700000",
+                      "train_sample_n_800000",
+                      "train_sample_n_900000",
+                      "train_sample_n_3000000"),
     selection_sets = c("evaluation_selection_50_percent_split"), # Evaluation sets we use to select the best pipelines
     test_sets = c("evaluation_test_50_percent_split", "official_holdout_set") # Evaluation sets we use for holdout evaluations.
   )
@@ -82,4 +99,4 @@ threshold_increment <- .01
 n_bootstrap <- 1000 
 
 save_only_winning_hyperparameter_draw_results <- FALSE
-results_path <- "results_individual_topics_seeds_2-3_2025-08.csv"
+results_path <- "results_learning_curves_seed_3_x125_2025-08.csv"

@@ -1,3 +1,6 @@
 Archive_gitignore/
 .DS_Store
 .Rhistory
+exports/export_2025-04-23_mark/results_sample_size1_2025-04-16_for_Varun.xlsx
+plots_and_tables_for_paper/.Rapp.history
+plots_and_tables_for_paper/.RData

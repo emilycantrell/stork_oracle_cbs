@@ -20,14 +20,16 @@ The Groundhog package will automatically load other dependencies using the most 
 
 Running the code on a computer with these specs took less than 30 seconds.
 
-## INSTRUCTIONS FOR RUNNING THE CODE
+## INSTRUCTIONS FOR RUNNING THE CODE TO GENERATE FIGURES AND TABLES
+
+To generate the figures and tables, follow the steps below. Please note that the code in this directory does not retrain the models from scratch; it simply produces figures and tables with our existing results files.
 
 1. Clone the `december_export` branch of this repository to your local machine. If you prefer to download a ZIP file instead of cloning, be sure to download the `december_export` branch.
 
 2. Install the versions of R and Groundhog specified above. (You may be able to skip this step if you already have other versions of R and Groundhog; it is possible the code will run on other versions.)
 
-3. Open the `run_all` file in this directory and choose the desired `target_test_set` by uncommenting the appropriate line. For the validation set, choose `evaluation_test_50_percent_split`. For the holdout set, choose `official_holdout_set`. (Note: we have not yet tested the code with the `official holdout set` option yet because we are waiting until after reviewer feedback to touch the holdout set results.)
+3. Open the `run_all` file in this directory and choose the desired `target_test_set` by uncommenting the appropriate line. For the validation set, choose `evaluation_test_50_percent_split`. For the holdout set, choose `official_holdout_set`. (Note: we have not yet tested the code with the `official holdout set` option because we are waiting until after reviewer feedback to touch the holdout set results.)
 
 4. Run `run_all`. You will find all figures and tables in `stork_oracle_cbs/plots_and_tables_for_paper/plots_and_tables_output`.
 
-Note: The visual abstract (Figure 1) was assembled in Freeform using the outputs from the "Figure 1" scripts. Additionally, Figure 6 was manually edited in Freeform to include brackets showing the gap between curves.
+Note: The visual abstract (Figure 1) was assembled in Freeform using the outputs from the "Figure 1" scripts. Additionally, Figure 6 was manually edited in Freeform to include brackets showing the size of the gap between curves.

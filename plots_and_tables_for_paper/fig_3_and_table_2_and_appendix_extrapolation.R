@@ -26,11 +26,29 @@ metrics_to_run <- c("R2_Holdout", "LogLoss", "MSE", "Accuracy", "F1_Score")
 #axis_type <- "linear"
 axis_type <- "log10"
 
-# If txt file with tables already exists, remove it so that we start fresh on this run 
+# Test set label for saving the file name
+eval_set_label_for_saved_file <- 
+  if (target_test_set == "evaluation_test_50_percent_split") {
+    "_validation_set"
+  } else if (target_test_set == "official_holdout_set") {
+    "_holdout_set"
+  } else {
+    stop("Unknown target_test_set value: ", target_test_set) 
+    # Note: we also have results for the selection set but I don't 
+    # expect to ever use it for these plots
+  }
+
+# Generate the name of the file that will contain tables from this file
 tables_file <- here(
-  "plots_and_tables_for_paper/plots_and_tables_output/",
-  "table_2_and_appendix_tables_extrapolation_abs_diff.txt"
+  "plots_and_tables_for_paper/plots_and_tables_output",
+  paste0(
+    "table_2_and_appendix_tables_extrapolation_abs_diff",
+    eval_set_label_for_saved_file,
+    ".txt"
+  )
 )
+
+# If txt file with tables already exists, remove it so that we start fresh on this run 
 if (file.exists(tables_file)) {
   file.remove(tables_file)
 }
@@ -358,19 +376,9 @@ for (my_metric in metrics_to_run) {
     (p3 | p4) /
     (p5 | legend_for_panel)
   
-  # Labels for saving file name
+  # Generate metric label for saved file
   # If R2_Holdout, just call it R2 (eval_set_label_for_saved_file will indicate validation or holdout)
   metric_label_for_saved_file <- ifelse(my_metric == "R2_Holdout", "R2", my_metric)
-  eval_set_label_for_saved_file <- 
-    if (target_test_set == "evaluation_test_50_percent_split") {
-      "_validation_set"
-    } else if (target_test_set == "official_holdout_set") {
-      "_holdout_set"
-    } else {
-      stop("Unknown target_test_set value: ", target_test_set) 
-      # Note: we also have results for the selection set but I don't 
-      # expect to ever use it for these plots
-    }
   
   # Save the panel
   panel_file_name <- paste0(
@@ -511,8 +519,6 @@ for (my_metric in metrics_to_run) {
   )
   
   # 7) Write / append LaTeX table to a single .txt file
-  tables_file <- here("plots_and_tables_for_paper/plots_and_tables_output/table_2_and_appendix_tables_extrapolation_abs_diff.txt")
-  
   if (!file.exists(tables_file)) {
     cat(latex_table, file = tables_file)
   } else {

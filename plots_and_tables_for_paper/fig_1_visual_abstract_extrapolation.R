@@ -246,7 +246,9 @@ p <- ggplot(data_for_plot, aes(x = n_training_set, y = estimate_metric)) +
     legend.text = element_text(size = 20) , 
     legend.justification = c("left", "bottom"),
     legend.box.just = "left",
-    panel.border = element_rect(color = "black", size = .75)
+    panel.border = element_rect(color = "black", size = .75),
+    panel.grid.major = element_line(size = 0.75),
+    panel.grid.minor = element_line(size = 0.5)
   ) + 
   scale_y_continuous(labels = strip_leading_zero)
   #ggtitle(paste0("Extrapolation with main seed = ", main_seed)) 

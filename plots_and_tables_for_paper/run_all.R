@@ -40,11 +40,10 @@ packages <- c(
   "pBrackets"
 )
 
-invisible(
-  suppressMessages(
-    groundhog.library(packages, "2025-11-15")
-  )
-)
+groundhog.library(packages, "2025-11-15")
+here() %>%
+  paste0("/plots_and_tables_for_paper") %>%
+  setwd()
 
 #### CREATE OUTPUT DIRECTORY ####
 

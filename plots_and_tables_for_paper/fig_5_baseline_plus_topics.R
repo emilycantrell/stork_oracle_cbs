@@ -172,7 +172,8 @@ ggplot(results_combined, aes(x = feature_set, y = estimate_R2_Holdout, fill = fa
     axis.title = element_text(size = 14),
     axis.text = element_text(size = 13),
     legend.title = element_text(size = 13),
-    legend.text = element_text(size = 11)
+    legend.text = element_text(size = 11),
+    panel.border = element_rect(color = "black", size = .75)
   ) + 
   scale_y_continuous(
     limits = c(0, 0.35),

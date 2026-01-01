@@ -81,7 +81,8 @@ results %>%
     axis.text.x = element_text(size = 20),
     axis.text.y = element_text(size = 20),
     axis.title.y = element_text(size = 20), 
-    panel.grid = element_blank()
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", size = .75)
   )
 
 # Create target test set label for the file name

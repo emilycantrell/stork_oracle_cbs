@@ -278,7 +278,8 @@ for (my_metric in metrics_to_run) {
       axis.title = element_text(size = 14),
       axis.text = element_text(size = 13),
       legend.title = element_text(size = 13),
-      legend.text = element_text(size = 11)
+      legend.text = element_text(size = 11),
+      panel.border = element_rect(color = "black", size = .75)
     ) + 
     
     scale_y_continuous(

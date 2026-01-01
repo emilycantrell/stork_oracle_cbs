@@ -141,7 +141,8 @@ Winning Model
     axis.title = element_text(size = 14),
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 13),
-    legend.text = element_text(size = 11)
+    legend.text = element_text(size = 11),
+    panel.border = element_rect(color = "black", size = .75)
   )
 
 print(plot_without_brackets)

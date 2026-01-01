@@ -234,6 +234,7 @@ run_metric <- function(my_metric) {
       legend.position.inside = c(0.5, 0.05),
       legend.justification = c(0.5, 0),
       legend.background = element_rect(fill = alpha("white", 0.7), color = "gray80"),
+      panel.border = element_rect(color = "black", size = .75),
       plot.tag.position = c(0.17, 0.98),  # Inside upper-left corner of plot panel
       plot.tag = element_text(size = 14, face = "bold")
     )
@@ -244,6 +245,7 @@ run_metric <- function(my_metric) {
       legend.position = "none",
       axis.title.y = element_blank(),
       axis.text.y = element_blank(),
+      panel.border = element_rect(color = "black", size = .75),
       plot.tag.position = c(0.055, 0.98),  # Same position as (A)
       plot.tag = element_text(size = 14, face = "bold")
     )

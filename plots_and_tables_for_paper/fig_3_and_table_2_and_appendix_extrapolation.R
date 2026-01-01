@@ -300,7 +300,8 @@ for (my_metric in metrics_to_run) {
       theme_bw() +
       theme(
         axis.title = element_text(size = 14),
-        axis.text  = element_text(size = 12)
+        axis.text  = element_text(size = 12),
+        panel.border = element_rect(color = "black", size = .75)
       ) + 
       guides(
         shape    = guide_legend(title = "Learning Curve", order = 1),

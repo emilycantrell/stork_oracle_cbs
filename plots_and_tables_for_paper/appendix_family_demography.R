@@ -92,7 +92,8 @@ results %>%
     axis.text = element_text(size = 13),
     legend.title = element_text(size = 13),
     legend.text = element_text(size = 11),
-    strip.text = element_text(size = 13, face = "bold")
+    strip.text = element_text(size = 13, face = "bold"),
+    panel.border = element_rect(color = "black", size = .75)
   ) + 
   scale_y_continuous(
     labels = function(x) strip_leading_zero(x)

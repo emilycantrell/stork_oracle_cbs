@@ -213,7 +213,7 @@ strip_leading_zero <- function(x, digits = 1) {
 
 # Plot
 p <- ggplot(data_for_plot, aes(x = n_training_set, y = estimate_metric)) +
-  geom_point(aes(shape = split), size = 2, alpha = 0.6) +
+  geom_point(aes(shape = split), size = 2, alpha = 0.6, stroke = 1) +
   scale_shape_manual(
     values = c("train" = 16, "test" = 1),
     labels = c(
@@ -246,6 +246,7 @@ p <- ggplot(data_for_plot, aes(x = n_training_set, y = estimate_metric)) +
     legend.text = element_text(size = 20) , 
     legend.justification = c("left", "bottom"),
     legend.box.just = "left",
+    panel.border = element_rect(color = "black", size = .75)
   ) + 
   scale_y_continuous(labels = strip_leading_zero)
   #ggtitle(paste0("Extrapolation with main seed = ", main_seed)) 

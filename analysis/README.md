@@ -1,6 +1,6 @@
 ## OVERVIEW
 
-The code in this directory creates figures and tables for our paper in the PreFer special issue, using results that we exported from the remote access environment for the Centraal Bureau voor de Statistiek (CBS) which manages the Dutch registry. The exported results are available in `stork_oracle_cbs/exports/`. See the README in the root directory of this repository for information about how we generated those results.
+The code in this directory creates figures and tables for our paper in the PreFer special issue, using results that we exported from the remote access environment for the Centraal Bureau voor de Statistiek (CBS) which manages the Dutch registry. The exported results are available in `stork_oracle_cbs/results/`. See the README in the root directory of this repository for information about how we generated those results.
 
 ## SPECS & VERSION NUMBERS
 

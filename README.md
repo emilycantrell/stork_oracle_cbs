@@ -60,7 +60,7 @@ The code requires the following datasets as input in the `data` folder:
 
 ## INSTRUCTIONS FOR RUNNING THE CODE
 
-Please note that this process, especially Step 8, can take quite a while. We expect all 11 jobfiles to take about 10 days to run if the run time had been continuous.
+Please note that this process, especially Step 8, can take quite a while. We expect all 11 jobfiles to take about 9 days to run if the run time had been continuous.
 
 1.  Clone the `special_issue_paper` branch of this repository into the remote access environment.
 

@@ -2,7 +2,7 @@ Please run the following two pieces of code in sequence.
 
 `1_generate_preprocesed_data.R` produces preprocessed datasets.
 
-`2_missingness.R` counts the number of missing data cells for both the outcome an the features. We focus on features without structural missingness. Structural missingness refers to the situation in which a missingness code excludes a defined category of people from having non-missing values or when a feature covers information about a family member the focal individual may not have.
+`2_missingness.R` counts the number of missing data cells for both the outcome and the features. We focus on features without structural missingness. Structural missingness refers to the situation in which a missingness code excludes a defined category of people from having non-missing values or when a feature covers information about a family member the focal individual may not have.
 
 Please set the working directory to the main directory, the one containing folders `data`, `results`, and others.
 
@@ -16,7 +16,7 @@ The code requires the following datasets as input in the `data` folder:
 
 `FAMILIENETWERK2020TABV1.csv`, register of family relations data available via CBS secure environment
 
-`holdout_final_leaderboard.csv`, predictive features from official holdouts set provided by PreFer organizers, similar to `train.csv`, available via CBS Data Storage. Please contact us for more details.
+`holdout_final_leaderboard.csv`, predictive features from official holdout set provided by PreFer organizers, similar to `train.csv`, available via CBS Data Storage. Please contact us for more details.
 
 `final_leaderboard_outcomes.csv`, outcomes from official holdouts set provided by PreFer organizers, available via CBS Data Storage. Please contact us for more details.
 

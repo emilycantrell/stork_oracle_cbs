@@ -38,7 +38,7 @@ Other than the code within the `analysis` folder (see `README.md` within the fol
 | **tidyverse** | 2.0.0 |
 | **xgboost** | 1.7.7.1 |
 
-It is possible the code will run on other versions as well.
+It is possible the code will run on other versions as well. The code continued to run up until at least R version 4.4.0 and with latest package versions installed on the CBS environment as of August 2025. It may still run with package versions beyond that date but has not been tested since August 2025.
 
 ## DATA
 

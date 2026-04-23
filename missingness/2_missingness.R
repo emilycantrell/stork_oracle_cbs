@@ -39,6 +39,10 @@ data <- "data/data.csv" %>%
   # entered the target population and for institutional household members.
   # MOEDER and VADER variables are structurally missing for people without two
   # officially recognized parents.
+  # The variable has_partner is accidentally excluded here even though it does
+  # not have structural missingness by construction (one either lives or do not
+  # live with a partner in huishoudensbus). Fortunately, the variable also has
+  # no missingness by construction.
   select(-GBAIMPUTATIECODE, -DATUMEINDEHH, -INHPOPIIV, -INHUAF, INHUAFL, -starts_with(c("GEB", "n_", "INPEM", "INPP100P", "INHARMEUR", "VEHP100")), -contains(c("household_child_", "_partner", "children_of_sex_")), -ends_with(c("_youngest", "_main", "PARTNER"))) %>%
   mutate(across(starts_with("GBAGEBOORTELAND"), ~if_else(.x == "_0", NA, .x)),
          across(all_of(c("INPPINK", "INPPOSHHK", "INHEHALGR", "INHUAFTYP")), ~if_else(.x == "_9", NA, .x)),

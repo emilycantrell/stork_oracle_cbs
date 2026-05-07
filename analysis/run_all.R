@@ -2,20 +2,33 @@ library(groundhog)
 
 #### CHOOSE TEST SET ####
 
-# The default in all scripts is evaluation_test_50_percent_split. 
-# To use the official holdout set instead, uncomment the appropriate line below 
-# and it will will override the default in all scripts.
-# Note: we have not tested the official_holdout_set option yet since we will not
-# examine results for the holdout set until after reviewer feedback.
+# The default in all scripts is evaluation_test_50_percent_split. Also, by
+# default, feature_sets_to_plot_for_sample_size does not include "AS_FS". To 
+# use the official holdout results instead, uncomment the appropriate line 
+# below and it will override the default in all scripts.
+# Note: we have not tested the official_holdout_set and AS_FS option yet since 
+# we will not examine holdout results until after reviewer feedback.
 target_test_set <- "evaluation_test_50_percent_split"
+feature_sets_to_plot_for_sample_size <- 
+  c("without_leakage", "prefer_official_train", "ego_AS")
 # or
-#target_test_set <- "official_holdout_set"
+# target_test_set <- "official_holdout_set"
+# feature_sets_to_plot_for_sample_size <- 
+#   c("without_leakage", "prefer_official_train", "AS_FS", "ego_AS")
 
 stopifnot(
   target_test_set %in% c(
     "evaluation_test_50_percent_split",
     "official_holdout_set"
-  )
+  ) &
+    identical(
+      feature_sets_to_plot_for_sample_size,
+      c("without_leakage", "prefer_official_train", "ego_AS")
+    ) |
+    identical(
+      feature_sets_to_plot_for_sample_size,
+      c("without_leakage", "prefer_official_train", "AS_FS", "ego_AS")
+    )
 )
 
 #### LOAD PACKAGES ####
@@ -66,6 +79,7 @@ file_names <- c(
   "fig_4_individual_topics.R",
   "fig_5_baseline_plus_topics.R",
   "fig_6_sample_size_feature_set_interdependence.R", 
+  "appendix_feature_description.R",
   "appendix_baseline_plus_topics.R",
   "appendix_family_demography.R"
 )
@@ -83,7 +97,7 @@ for (file in file_names) {
   # Clear everything except global controls
   rm(list = setdiff(
     ls(envir = .GlobalEnv),
-    c("target_test_set", "output_dir")
+    c("target_test_set", "feature_sets_to_plot_for_sample_size", "output_dir")
   ))
   
   gc()

@@ -1,6 +1,6 @@
 # This file calls all other files in this folder
 # In the terminal, set current directory to working directory to the main 
-# directory, the one containing folders `data`, `results`, and others.
+# directory, the one containing folders `data`, `results`, and others
 # Then run the following line
 # RScript model/run_all.R "data/GBAPERSOON2020TABV3.csv" "data/GBAHUISHOUDENS2020BUSV1.csv" "data/FAMILIENETWERK2020TABV1.csv" "data/holdout_final_leaderboard.csv" "data/final_leaderboard_outcome.csv" "data/Codebook UPD.xlsx" "data/"
 print("Started running the full code:")

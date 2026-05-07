@@ -13,17 +13,17 @@ library(tidyverse)
 # hyperparameters, which include the number of trees for catboost and xgboost
 # as well as automatically generated lambdas in glmnet. Tuning these 
 # hyperparameters do not require training a model from scratch, so they are 
-# handled somewhat separately in this file as well as run_step.R
+# handled somewhat separately in this file as well as run_step.R.
 
 
-# On Line 290 of this file, the function run_grid_row() is run for a first 
+# On Line 291 of this file, the function run_grid_row() is run for a first 
 # round for each feature_set-sampling_file-training_set-grid_row combination 
 # (each row in output of chunking.R for the special issue paper) to get 
 # bootstrapped performance metrics for each evaluation set. The list of 
-# evaluation sets is defined on Lines 84-118 and ultimately draws from jobfile
+# evaluation sets is defined on Lines 82-119 and ultimately draws from jobfile
 # settings.
 
-# On Line 44 of run_metric_for_selecting_pipelines.R, this function is run for
+# On Line 43 of run_metric_for_selecting_pipelines.R, this function is run for
 # a second round for each 
 # feature_set-sampling_file-training_set-grid_row-selection_set combination
 # to get additional bootstrapped performance metrics for each evaluation set.
@@ -70,7 +70,8 @@ run_grid_row <- function(feature_set, sampling_file, training_set, model, grid_r
   zv <- recipe(training_set_data) %>%
     step_zv() %>%
     prep(training_set_data, strings_as_factors = "FALSE")
-  # Save the remove_zero_variance recipe. The saved file is never actually used
+  # Save the remove_zero_variance recipe. The saved file is never actually 
+  # used.
   saveRDS(zv, "data/remove_zero_variance.RDS")
   # Apply recipe for removing zero variance
   training_set_data <- bake(zv, training_set_data)
@@ -84,8 +85,8 @@ run_grid_row <- function(feature_set, sampling_file, training_set, model, grid_r
   # Selection sets are evaluation sets we use to select the best hyperparameter 
   # combination and/or a best classification threshold (For the special issue 
   # paper, there is no hyperparameter tuning, so we would just be picking the 
-  # best the best thresholds for F1 and accuracy, as in 
-  # run_step.R). Selection sets were defined in the jobfile.
+  # best the best thresholds for F1 and accuracy, as in run_step.R). Selection 
+  # sets were defined in the jobfile.
   selection_sets <- pull(data_splits_related_to_training_set, selection_sets) %>%
     unique()
   # For the special issue paper, this first if condition is always FALSE
@@ -264,9 +265,9 @@ run_grid_row <- function(feature_set, sampling_file, training_set, model, grid_r
   
   # For each model, produce evaluation metrics at each step value, which refers
   # to the number of trees in a catboost or xgboost model or an automatically
-  # generated lambda in glmnet. See run_step.R. For the special issue 
-  # paper, this is not really iterated because we only look at one step value, 
-  # which corresponds to 1000 trees for catboost
+  # generated lambda in glmnet. See run_step.R. For the special issue paper,
+  # this is not really iterated because we only look at one step value, 
+  # which corresponds to 1000 trees for catboost.
   steps_start <- Sys.time()
   print(paste("run_steps started for", model_path))
   print(steps_start)

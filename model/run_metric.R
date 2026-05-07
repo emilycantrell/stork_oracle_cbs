@@ -46,7 +46,7 @@ run_metric <- function(metric, predictions, outcomes, check_threshold_reference_
   }
   
   # Apply a classification threshold for metrics that require it. The 
-  # thresholds are determined in run_step.R
+  # thresholds are determined in run_step.R.
   if(check_threshold_reference_if_applicable & metric %in% c("F1_Score", "Recall", "Precision", "Accuracy")) {
     winning_threshold <- threshold_reference$winning_threshold[threshold_reference$metric == metric]
     predictions_internal <- ifelse(predictions >= winning_threshold, 1, 0)

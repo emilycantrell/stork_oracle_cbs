@@ -7,7 +7,7 @@ library(tidyverse)
 # hyperparameters, which include the number of trees for catboost and xgboost
 # as well as lambda for glmnet. Tuning these hyperparameters do not require
 # training a model from scratch, so they are handled somewhat separately in
-# run_grid_row.R as well as run_step.R
+# run_grid_row.R as well as run_step.R.
 
 feature_set <- names(feature_set_settings)
 training_set <- unique(data_splits$training_sets)

@@ -15,8 +15,14 @@ if (!isTRUE(getOption("run_all_loaded_packages"))) {
 # Choose whether to test on evaluation set or holdout set
 # "evaluation_test_50_percent_split" for validation set 
 # "official_holdout_set" for holdout set
+# Also, choose whether "AS_FS" should be included as a feature set. We are
+# only using it for holdout results.
 if (!exists("target_test_set", inherits = TRUE)) {
   target_test_set <- "evaluation_test_50_percent_split"
+}
+if (!exists("feature_sets_to_plot_for_sample_size", inherits = TRUE)) {
+  feature_sets_to_plot_for_sample_size <- 
+    c("without_leakage", "prefer_official_train", "ego_AS")
 }
 
 # Create vector of metrics
@@ -129,7 +135,7 @@ for (my_metric in metrics_to_run) {
              ci_upper_metric = !!ci_upper_col)
     
     # Define feature sets to compare
-    feature_sets_to_plot <- c("without_leakage", "prefer_official_train", "ego_AS")
+    feature_sets_to_plot <- feature_sets_to_plot_for_sample_size
     
     # Loop through each feature set
     for (feature_i in feature_sets_to_plot) {
@@ -205,12 +211,10 @@ for (my_metric in metrics_to_run) {
   
   # Set the order for the legend
   data_for_plot <- data_for_plot %>%
-    mutate(split = factor(split, levels = c("train", "test"))) %>%
-    mutate(feature_set = factor(feature_set, levels = c(
-      "without_leakage",          # top
-      "prefer_official_train",    # middle
-      "ego_AS"                    # bottom
-    )))
+  mutate(split = factor(split, levels = c("train", "test"))) %>%
+  mutate(feature_set = factor(feature_set,
+    levels = feature_sets_to_plot
+  ))
   
   # Compute global y-axis limits for all panel plots
   global_ylim <- range(
@@ -262,6 +266,43 @@ for (my_metric in metrics_to_run) {
     my_metric  # fallback
   )
   
+  if(length(feature_sets_to_plot) == 3) {
+    colors <- c(
+      "without_leakage" = "#0072B2",
+      "prefer_official_train" = "#33B17C",
+      "ego_AS" = "#E69F00"
+    )
+    labels <- c(
+      "without_leakage" = "All features from winning model",
+      "prefer_official_train" = '"Starter pack" file',
+      "ego_AS" = "Ego's age & sex"
+    )
+    levels <- c(
+      "All features from winning model",
+      '"Starter pack" file',
+      "Ego's age \\& sex"
+    )
+  } else{
+    colors <- c(
+      "without_leakage" = "#0072B2",
+      "prefer_official_train" = "#33B17C",
+      "AS_FS" = "#D55E00",
+      "ego_AS" = "#E69F00"
+    )
+    labels <- c(
+      "without_leakage" = "All features from winning model",
+      "prefer_official_train" = '"Starter pack" file',
+      "AS_FS" = "Age, sex, & family structure",
+      "ego_AS" = "Ego's age & sex"
+    )
+    levels <- c(
+      "All features from winning model",
+      '"Starter pack" file',
+      "Age, sex, \\& family structure",
+      "Ego's age \\& sex"
+    )
+  }
+  
   # Function to make plot
   make_plot_for_one_seed <- function(seed_number, for_panel = TRUE) {
     
@@ -279,16 +320,8 @@ for (my_metric in metrics_to_run) {
       ) +
       scale_linetype_manual(values = c("Estimated learning curve" = "dashed")) +
       scale_color_manual(
-        values = c(
-          "without_leakage" = "#0072B2",
-          "prefer_official_train" = "#33B17C",
-          "ego_AS" = "#E69F00"
-        ),
-        labels = c(
-          "without_leakage" = "All features from winning model",
-          "prefer_official_train" = '"Starter pack" file',
-          "ego_AS" = "Ego's age & sex"
-        )
+        values = colors,
+        labels = labels
       ) +
       x_axis_scale +
       labs(
@@ -431,6 +464,7 @@ for (my_metric in metrics_to_run) {
       feature_set_pretty = case_when(
         feature_set == "without_leakage"       ~ "All features from winning model",
         feature_set == "prefer_official_train" ~ '"Starter pack" file',
+        feature_set == "AS_FS"                ~ "Age, sex, \\& family struture",
         feature_set == "ego_AS"                ~ "Ego's age \\& sex",
         TRUE                                   ~ as.character(feature_set)
       )
@@ -442,11 +476,7 @@ for (my_metric in metrics_to_run) {
     mutate(
       feature_set_pretty = factor(
         feature_set_pretty,
-        levels = c(
-          "All features from winning model",
-          '"Starter pack" file',
-          "Ego's age \\& sex"
-        )
+        levels = levels
       )
     ) %>%
     group_by(feature_set_pretty) %>%

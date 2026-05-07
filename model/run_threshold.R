@@ -1,5 +1,5 @@
 # For each possible value of classification threshold, get performance measures
-# in terms of classification metrics.
+# in terms of classification metrics
 
 library(tidyverse)
 

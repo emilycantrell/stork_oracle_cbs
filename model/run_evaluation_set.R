@@ -1,4 +1,4 @@
-# For each evaluation set, get bootstrapped performance scores.
+# For each evaluation set, get bootstrapped performance scores
 library(tidyverse)
 run_evaluation_set <- function(evaluation_set) {
   source("run_bootstrap_sample.R", local = TRUE)
@@ -15,7 +15,7 @@ run_evaluation_set <- function(evaluation_set) {
   # evaluation using metrics defined in metrics_for_all_pipelines in the 
   # jobfile. (For the special issue paper, there is no hyperparameter tuning, 
   # so we would just be picking the best the best thresholds for F1 and 
-  # accuracy, as in run_step.R)
+  # accuracy, as in run_step.R.)
   if (is.null(selection_set)) {
     check_threshold_reference_if_applicable <- FALSE
     metrics <- metrics_for_all_pipelines
@@ -24,13 +24,13 @@ run_evaluation_set <- function(evaluation_set) {
     # After we have chosen a best hyperparameter combination and/or threshold, 
     # we conduct a second round of evaluation using only those metrics defined 
     # in metrics_for_winning_pipelines in the jobfile, as we have already
-    # evaluated using metrics_for_all_pipelines the first time around.
+    # evaluated using metrics_for_all_pipelines the first time around
     check_threshold_reference_if_applicable <- TRUE
     if (evaluation_set %in% first_round_evaluation_sets) {
       metrics <- metrics_for_winning_pipelines
       # For the special issue paper, 
       # save_only_winning_hyperparameter_draw_results is always off in the
-      # jobfile. If turned on, we get less complete data.
+      # jobfile. If turned on, we get less complete data
       if (save_only_winning_hyperparameter_draw_results) {
         new_row <- 0
       }
@@ -45,12 +45,12 @@ run_evaluation_set <- function(evaluation_set) {
   }
   
   # Get bootstrapped metrics for each bootstrap sample. See 
-  # run_bootstrap_sample.R
+  # run_bootstrap_sample.R.
   bootstrap_samples_output <- map(bootstrap_samples, run_bootstrap_sample) %>%
     list_rbind() %>%
     unnest(run_bootstrap_sample_output)
   # bootstrap_sample No. 1 is always the non-bootstrapped estimate. See
-  # run_bootstrap_sample.R
+  # run_bootstrap_sample.R.
   estimates <- filter(bootstrap_samples_output, bootstrap_sample == 1) %>%
     select(-bootstrap_sample) %>%
     rename(estimate = value)

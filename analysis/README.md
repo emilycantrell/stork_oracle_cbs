@@ -28,7 +28,7 @@ To generate the figures and tables, follow the steps below. Please note that the
 
 2. Install the versions of R and Groundhog specified above. (You may be able to skip this step if you already have other versions of R and Groundhog; it is possible the code will run on other versions.)
 
-3. Open the `run_all` file in this directory and choose the desired `target_test_set` by uncommenting the appropriate line. For the validation set, choose `evaluation_test_50_percent_split`. For the holdout set, choose `official_holdout_set`. (Note: we have not yet tested the code with the `official holdout set` option because we are waiting until after reviewer feedback to touch the holdout set results.)
+3. Open the `run_all` file in this directory and choose the desired `target_test_set` and `feature_sets_to_plot_for_sample_size` by uncommenting the appropriate lines. For validation metrics submitted for peer review, choose `evaluation_test_50_percent_split` and a `feature_sets_to_plot_for_sample_size` that does not include `"AS_FS"`. For holdout metrics to be included in the final draft, choose `official_holdout_set` a `feature_sets_to_plot_for_sample_size` that includes `"AS_FS"`. (Note: we have not yet tested the code with the `official holdout set` and `"AS_FS"` option because we are waiting until after reviewer feedback to touch the holdout results.)
 
 4. Run `run_all`. You will find all figures and tables in `stork_oracle_cbs/analysis/plots_and_tables_output`.
 

@@ -1,0 +1,74 @@
+\begin{table}
+
+\caption{Absolute difference between predicted $R^2_{\text{Validation}}$ and observed $R^2_{\text{Validation}}$ at $n =$ 3.7 million}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+\textbf{Feature Set} & \textbf{\begin{tabular}{c} Mean \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Median \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Max \\ Absolute \\ Difference \end{tabular}}\\
+\midrule
+All features from winning model & .012 & .014 & .019\\
+"Starter pack" file & .006 & .003 & .015\\
+Ego's age \& sex & .006 & .009 & .012\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+ \begin{table}
+
+\caption{Absolute difference between predicted $\text{Log Loss}$ and observed $\text{Log Loss}$ at $n =$ 3.7 million}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+\textbf{Feature Set} & \textbf{\begin{tabular}{c} Mean \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Median \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Max \\ Absolute \\ Difference \end{tabular}}\\
+\midrule
+All features from winning model & .007 & .005 & .011\\
+"Starter pack" file & .005 & .004 & .008\\
+Ego's age \& sex & .006 & .006 & .007\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+ \begin{table}
+
+\caption{Absolute difference between predicted $\text{MSE}$ and observed $\text{MSE}$ at $n =$ 3.7 million}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+\textbf{Feature Set} & \textbf{\begin{tabular}{c} Mean \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Median \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Max \\ Absolute \\ Difference \end{tabular}}\\
+\midrule
+All features from winning model & .002 & .002 & .003\\
+"Starter pack" file & .001 & .001 & .002\\
+Ego's age \& sex & .001 & .001 & .001\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+ \begin{table}
+
+\caption{Absolute difference between predicted $\text{Accuracy}$ and observed $\text{Accuracy}$ at $n =$ 3.7 million}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+\textbf{Feature Set} & \textbf{\begin{tabular}{c} Mean \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Median \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Max \\ Absolute \\ Difference \end{tabular}}\\
+\midrule
+All features from winning model & .004 & .003 & .011\\
+"Starter pack" file & .007 & .007 & .012\\
+Ego's age \& sex & .000 & .000 & .000\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+ \begin{table}
+
+\caption{Absolute difference between predicted $F1 Score$ and observed $F1 Score$ at $n =$ 3.7 million}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+\textbf{Feature Set} & \textbf{\begin{tabular}{c} Mean \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Median \\ Absolute \\ Difference \end{tabular}} & \textbf{\begin{tabular}{c} Max \\ Absolute \\ Difference \end{tabular}}\\
+\midrule
+All features from winning model & .019 & .017 & .025\\
+"Starter pack" file & .014 & .014 & .018\\
+Ego's age \& sex & .007 & .008 & .010\\
+\bottomrule
+\end{tabular}
+\end{table}

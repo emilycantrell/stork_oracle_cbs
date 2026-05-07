@@ -1,6 +1,6 @@
 Please run the following two pieces of code in sequence.
 
-`1_train_and_eval_samples_original.R` This file produces indicators that split the data into an official holdout set, an internal validation set (evaluation_test_50_percent_split), an internal selection set (evaluation_test_50_percent_split), and an inner training set (training_set). It also produces some subsample indicators that were not later used.
+`1_train_and_eval_samples_original.R` This file produces indicators that split the data into an official holdout set, an internal validation set (evaluation_test_50_percent_split), an internal selection set (evaluation_test_50_percent_split), and an inner training set (training_set). It also produces some subsample indicators that are not later used.
 
 `2_train_and_eval_samples_for_data_matrix_paper.R` adds indicators for subsamples of the inner training set that were used in the special issue paper
 

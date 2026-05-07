@@ -4,12 +4,12 @@
 # file-training_set-model-selection_set combination. Then the file calls 
 # run_grid_row() again on the best pipelines to get classification thresholds 
 # and prediction metrics not calculated first time around. The code then saves 
-# all of the results
+# all of the results.
 library(tidyverse)
 
 # For each feature_set-sampling_file-training_set-model-selection_set
 # combination, this function picks the best hyperparameter combination. (For
-# the special issue paper, there is no hyperparameter tunng
+# the special issue paper, there is no hyperparameter tuning.)
 run_metric_for_selecting_pipelines <- function(selection_metric) {
   estimate_selection_metric <- sym(paste0("estimate_", selection_metric))
   if (selection_metric %in% c("LogLoss", "MSE")) {
@@ -23,8 +23,7 @@ run_metric_for_selecting_pipelines <- function(selection_metric) {
   tibble(selection_metric = selection_metric, run_selection_metric_output = run_selection_metric_output)
 }
 # Produce a dataframe run_grid_row_outputs_for_selection with one row for each
-# For each feature_set-sampling_file-training_set-model-selection_set 
-# combination
+# feature_set-sampling_file-training_set-model-selection_set combination
 run_grid_row_outputs_for_selection <- rename(run_grid_row_outputs, selection_set = evaluation_set)
 if (!save_only_winning_hyperparameter_draw_results) { # Always TRUE for special issue paper
   run_grid_row_outputs_for_selection <- distinct(data_splits, training_sets, selection_sets) %>%

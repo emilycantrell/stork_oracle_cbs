@@ -4,7 +4,7 @@
 # evaluate the predictions.
 # In addition, if we have already picked a best hyperparameter combination 
 # using the selection set, we can now determine the best classification 
-# threshold for each classification metric
+# threshold for each classification metric.
 library(catboost)
 library(xgboost)
 library(glmnet)
@@ -39,7 +39,7 @@ run_step <- function(step) {
   # If we have already picked a best hyperparameter combination using the 
   # selection set, we calculate classification metrics at multiple
   # classification thresholds as defined in the jobfile, and pick the best
-  # threshold on the selection set. See run_threshold.R
+  # threshold on the selection set. See run_threshold.R.
   if (!is.null(selection_set)) {
     selection_set_predictions <- evaluation_sets_predictions[evaluation_sets_rinpersoon %in% selection_set_rinpersoon]
     thresholds <- seq(min(selection_set_predictions), max(selection_set_predictions) + threshold_increment, threshold_increment)

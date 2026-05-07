@@ -59,7 +59,7 @@ feature_set_labels <- c(
   "childcare" = "Childcare Proximity",
   "education" = "Education",
   "employment" = "Employment",
-  "AS_FS" = "Age, Sex, and\nFamily Structure",
+  "AS_FS" = "Age, Sex, &\nFamily Structure",
   "housing" = "Housing", 
   "immigration" = "Immigration",
   "income" = "Income",
@@ -68,7 +68,7 @@ feature_set_labels <- c(
 #### PLOT WITH BARS ####
 
 # Create function to remove leading 0 from decimal numbers
-strip_leading_zero <- function(x, digits = 2) {
+strip_leading_zero <- function(x, digits = 1) {
   gsub("^(-?)0\\.", "\\1.", formatC(x, format = "f", digits = digits))
 }
 

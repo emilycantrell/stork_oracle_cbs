@@ -1,12 +1,12 @@
 ## OVERVIEW
 
-This directory contains the code for reproducing the results for our paper "More Data, Modest Gains: Assessing Limits of Prediction in Multidomain Population-Scale Social Data."
+This directory contains the code for reproducing the results for our paper "More Data, Modest Gains: Assessing Limits of Prediction in Multi-domain Population-Scale Social Data."
 
-The folder `data` is the place for all relevant data files, most of which are not provided here in this repository and are under restricted access conditions. Please see the "DATA" section below for more details. If you and your institution have successfully [applied](https://www.cbs.nl/en-gb/our-services/customised-services-microdata/microdata-conducting-your-own-research/applying-for-access-to-microdata) for access to data from the Centraal Bureau voor de Statistiek (CBS), you can log onto CBS's remote access environment from within one of the [approved countries](https://www.cbs.nl/en-gb/faq/microdata/from-which-countries-is-it-allowed-to-log-in-on-the-cbs-microdata-environment-) and find the files within the environment. The folder `data` also contains some intermediate files produced while running the code.
+The folder `data` is the place for all relevant data files, most of which are not provided here in this repository and are under restricted access conditions. Please see the "DATA" section below for more details. If you belong to a research institution located within one of CBS's [approved countries](https://www.cbs.nl/en-gb/faq/microdata/from-which-countries-is-it-allowed-to-log-in-on-the-cbs-microdata-environment-) and have successfully [applied](https://www.cbs.nl/en-gb/our-services/customised-services-microdata/microdata-conducting-your-own-research/applying-for-access-to-microdata) for access to data from the Centraal Bureau voor de Statistiek (CBS), you can log onto CBS's remote access environment from an approved country and find the files within the environment. The folder `data` also contains some intermediate files produced while running the code.
 
 The folder `splits` contains the code for creating indicator variables that split the data into various training and test sets. See more details in the `README.md` within the folder.
 
-The folder `jobfiles` contains specifications for how we prepared the data, fit the catboost models, and evaluated prediction performances. For our paper, we used multiple sets of specifications with different settings for training sample sizes and feature sets, so we had multiple jobfiles. Please see the "JOBFILES" section for how the jobfiles correspond to various parts of the paper.
+The folder `jobfiles` contains specifications for how we prepare the data, fit the catboost models, and evaluate prediction performances. For our paper, we use multiple sets of specifications with different settings for training sample sizes and feature sets, so we have multiple jobfiles. Please see the "JOBFILES" section for how the jobfiles correspond to various parts of the paper.
 
 The folder `model` contains code that gets applied to each jobfile and actually does the data preparation, model fitting, and performance evaluation. Please see the "INSTRUCTIONS FOR RUNNING THE CODE" for more details.
 
@@ -21,7 +21,7 @@ The folder `analysis` uses the exported data to produce tables and figures for t
 Other than the code within the `analysis` folder (see `README.md` within the folder for more details), all code was run within the heavy server of the CBS secure access environment with the following specs:
 
 | Component | Specification |
-|:-----------------------------------|:-----------------------------------|
+|:---|:---|
 | **Processor** | Intel(R) Xeon(R) Gold 6442Y 2.60 GHz |
 | **Parallelization** | Maximum 4 threads |
 | **Memory** | 128 GB |
@@ -50,7 +50,7 @@ The code requires the following datasets as input in the `data` folder:
 
 `GBAHUISHOUDENS2020BUSV1.csv`, register of household data available via CBS secure environment. We found it at `G:/Bevolking/GBAHUISHOUDENSBUS/geconverteerde data/GBAHUISHOUDENS2020BUSV1.csv`.
 
-`FAMILIENETWERK2020TABV1.csv`, register of family relations data available via CBS secure environment. We found ti at `G:/Bevolking/FAMILIENETWERKTAB/FAMILIENETWERK2020TABV1.csv`.
+`FAMILIENETWERK2020TABV1.csv`, register of family relations data available via CBS secure environment. We found it at `G:/Bevolking/FAMILIENETWERKTAB/FAMILIENETWERK2020TABV1.csv`.
 
 `holdout_final_leaderboard.csv`, predictive features from official holdouts set provided by PreFer organizers, similar to `train.csv`, available via CBS Data Storage. Please contact us for more details.
 
@@ -58,11 +58,13 @@ The code requires the following datasets as input in the `data` folder:
 
 `Codebook UPD.xlsx`, codebook for `train.csv` provided by PreFer organizers, available directly in `data` folder.
 
+`table_a1_raw.csv`, descriptions of all features used in our main analysis, available directly in `data` folder.
+
 ## INSTRUCTIONS FOR RUNNING THE CODE
 
 Please note that this process, especially Step 8, can take quite a while. We expect all 11 jobfiles to take about 9 days to run if the run time had been continuous.
 
-1.  Clone the `special_issue_paper` branch of this repository into the remote access environment.
+1.  Clone the this repository into the remote access environment.
 
 2.  Populate the `data` folder with the data files mentioned above.
 
@@ -84,7 +86,7 @@ Please note that this process, especially Step 8, can take quite a while. We exp
 
 11. In RStudio, again, use the command `setwd("FILL_IN_FILEPATH")` to set the working directory to the main directory, the one containing folders `data`, `results`, and others.
 
-12. Run all of the code in `missingness/1_generate_preprocessed_data.R` (this can take an hour or so) and `missingness/2_missingness.R.R` in sequence. This should create `missingness.csv` in the `results` folder. See more details in the `README.md` within the `missingness` folder.
+12. Run all of the code in `missingness/1_generate_preprocessed_data.R` (this can take an hour or so) and `missingness/2_missingness.R` in sequence. This should create `missingness.csv` in the `results` folder. See more details in the `README.md` within the `missingness` folder.
 
 13. Follow instructions in the `README.md` within the `analysis` folder to reproduce all tables and figures in the paper.
 
@@ -94,12 +96,12 @@ Please note that this process, especially Step 8, can take quite a while. We exp
 
 `jobfile_extrapolation_seed_2_2025-08.R`, `jobfile_extrapolation_seed_3_2025-08.R`, and `jobfile_extrapolation_seed_4-5_2025-08.R` produce extrapolation training data for Figures C2, C3, C4, C5, C6, and Table 2.
 
-`jobfile_learning_curves_seed_1_2025-08.R` produces learning curve data for Figure 2 and Table 1. It also supplied extrapolation test data for Figures 1, 3, C2, C3, C4, C5, C6, and Table 2. In addition, it provided data on the age, sex, and family structure baseline and the winning model in Figures 1, 4, 5, 6, D7, D8, D9, D10.
+`jobfile_learning_curves_seed_1_2025-08.R` produces learning curve data for Figure 2 and Table 1. It also supplies extrapolation test data for Figures 1, 3, C2, C3, C4, C5, C6, and Table 2. In addition, it provides data on the age, sex, and family structure baseline and the winning model in Figures 1, 4, 5, 6, D7, D8, D9, D10.
 
-`jobfile_learning_curves_seed_2-5_2025-08.R` produces learning curve data for Table 1. It also supplied extrapolation test data for Figures C2, C3, C4, C5, C6, and Table 2. In addition, they provided data on the age, sex, and family structure baseline and the winning model in Figures 4, 5, 6, D7, D8, D9, and D10.
+`jobfile_learning_curves_seed_2-5_2025-08.R` produces learning curve data for Table 1. It also supplies extrapolation test data for Figures C2, C3, C4, C5, C6, and Table 2. In addition, it suplies data on the age, sex, and family structure baseline and the winning model in Figures 4, 5, 6, D7, D8, D9, and D10.
 
-`jobfile_individual_topics_seed_1_2025-08.R` and `jobfile_individual_topics_seed_2-5_2025-08.R` supplied topic-specific performance data for Figure 4.
+`jobfile_individual_topics_seed_1_2025-08.R` and `jobfile_individual_topics_seed_2-5_2025-08.R` supplies topic-specific performance data for Figure 4.
 
-`jobfile_baseline_plus_topics_seed_1_2025-08.R` and `jobfile_baseline_plus_topics_seed_2-5_2025-08.R` supplied performance data on individual topics in combination with the age, sex, and family structure baseline for Figures 5, D7, D8, D9, and D10.
+`jobfile_baseline_plus_topics_seed_1_2025-08.R` and `jobfile_baseline_plus_topics_seed_2-5_2025-08.R` supplies performance data on individual topics in combination with the age, sex, and family structure baseline for Figures 5, D7, D8, D9, and D10.
 
-`jobfile_family_demography_2025-04.R` supplied performance data on family demography features in Figure E11.
+`jobfile_family_demography_2025-04.R` supplies performance data on family demography features in Figure E11.

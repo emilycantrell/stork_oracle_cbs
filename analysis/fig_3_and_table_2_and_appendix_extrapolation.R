@@ -224,13 +224,24 @@ for (my_metric in metrics_to_run) {
   
   # Create function to remove leading 0 from decimal numbers
   strip_leading_zero <- function(values) {
-    # Try increasing number of digits until all formatted values are unique
-    for (d in 1:3) {
-      formatted <- gsub("^(-?)0\\.", "\\1.", formatC(values, format = "f", digits = d))
+    for (d in 1:10) {
+      formatted <- gsub(
+        "^(-?)0\\.",
+        "\\1.",
+        formatC(values, format = "f", digits = d)
+      )
+      
       if (length(unique(formatted)) == length(formatted)) {
         return(formatted)
       }
     }
+    
+    # Fallback: always return one label for every axis break
+    gsub(
+      "^(-?)0\\.",
+      "\\1.",
+      format(values, digits = 15, trim = TRUE)
+    )
   }
   
   # Define x-axis scale based on axis_type

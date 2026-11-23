@@ -114,9 +114,9 @@ for (my_metric in metrics_to_run) {
     results <- bind_rows(lower_n_results, higher_n_results)
     rm(lower_n_results, higher_n_results)
     
-    # Filter to just three feature sets (we are holding the fourth back as an informal "holdout")
+    # Filter to the feature sets selected for plotting
     results <- results %>%
-      filter(feature_set %in% c("without_leakage", "prefer_official_train", "ego_AS"))
+      filter(feature_set %in% feature_sets_to_plot_for_sample_size)
     
     # Build column names dynamically
     estimate_col <- paste0("estimate_", my_metric)
@@ -464,7 +464,7 @@ for (my_metric in metrics_to_run) {
       feature_set_pretty = case_when(
         feature_set == "without_leakage"       ~ "All features from winning model",
         feature_set == "prefer_official_train" ~ '"Starter pack" file',
-        feature_set == "AS_FS"                ~ "Age, sex, \\& family struture",
+        feature_set == "AS_FS"                ~ "Age, sex, \\& family structure",
         feature_set == "ego_AS"                ~ "Ego's age \\& sex",
         TRUE                                   ~ as.character(feature_set)
       )

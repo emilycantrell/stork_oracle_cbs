@@ -55,11 +55,24 @@ dat <- raw %>%
 # Preserve a consistent feature-set order in output tables and figure panels.
 # Separate plain-text and LaTeX labels prevent smart quotes being interpreted
 # incorrectly when pdflatex typesets the table.
-feature_sets <- c("without_leakage", "prefer_official_train", "ego_AS")
-feature_labels <- c(without_leakage = "All features from winning model",
-                    prefer_official_train = "“Starter pack” file", ego_AS = "Age and sex")
-feature_labels_tex <- c(without_leakage = "All features from winning model",
-                        prefer_official_train = "``Starter pack'' file", ego_AS = "Age and sex")
+# Use the feature sets selected in run_all.R
+feature_sets <- feature_sets_to_plot_for_sample_size
+
+feature_labels <- c(
+  without_leakage = "All features from winning model",
+  prefer_official_train = "“Starter pack” file",
+  AS_FS = "Age, sex, and family structure",
+  ego_AS = "Age and sex"
+)
+
+feature_labels_tex <- c(
+  without_leakage = "All features from winning model",
+  prefer_official_train = "``Starter pack'' file",
+  AS_FS = "Age, sex, and family structure",
+  ego_AS = "Age and sex"
+)
+
+
 # POW3 is the original specification. The alternatives include another
 # power-law form (MMF4), a Weibull form (WBL4), inverse-logarithmic
 # convergence (ILOG2), and exponential convergence (EXP3).
@@ -368,19 +381,40 @@ comparison <- dplyr::bind_rows(results) %>%
   dplyr::arrange(feature_set, form)
 qc <- dplyr::bind_rows(diagnostics)
 
-# Reproduction check: POW3 asymptotes on the validation split should match
-# the paper's reported three-decimal estimates within a small tolerance.
-# This is an internal consistency check, not a fit-quality guarantee.
-if (test_label == "validation_set") {
-  expected <- c(without_leakage=.351, prefer_official_train=.325, ego_AS=.104)
-  for (feature in feature_sets) {
-    found <- comparison$asymptote[comparison$feature_set == feature & comparison$form == "POW3"]
-    if (length(found)!=1 || abs(found-expected[[feature]]) > .0015)
-      stop("POW3 asymptote does not match main paper for ", feature)
+# Reproduction check: compare POW3 asymptotes against
+# the estimates calculated earlier in Figure 2 / Table 1.
+
+if (!exists("main_power_law_asymptotes", inherits = TRUE)) {
+  stop("Main-analysis asymptotes not found. Run Figure 2 code first.")
+}
+
+for (feature in feature_sets) {
+  
+  expected <- main_power_law_asymptotes[[feature]]
+  
+  found <- comparison$asymptote[
+    comparison$feature_set == feature &
+      comparison$form == "POW3"
+  ]
+  
+  if (length(expected) != 1 ||
+      length(found) != 1 ||
+      !is.finite(expected) ||
+      !is.finite(found) ||
+      abs(found - expected) > 1e-4) {
+    stop(
+      "POW3 asymptote does not match main analysis for ",
+      feature
+    )
   }
 }
-if (any(qc$extreme_or_near_bound))
-  warning("Some alternative fits have extreme parameters or near-bound estimates; inspect diagnostics.")
+
+# Check for extreme parameters
+if (any(qc$extreme_or_near_bound, na.rm = TRUE)) {
+  warning(
+    "Some alternative fits have extreme parameters or near-bound estimates; inspect diagnostics."
+  )
+}
 
 # Save full-precision numeric results and separate fit diagnostics before
 # rounding values for presentation in the LaTeX table.

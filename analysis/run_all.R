@@ -95,10 +95,16 @@ for (file in file_names) {
   
   source(file, local = FALSE)
   
-  # Clear everything except global controls
+  # Clear everything except global controls & asymptote results 
+  # (Note: asymptote results will be compared with sensitivity analysis to ensure they match)
   rm(list = setdiff(
     ls(envir = .GlobalEnv),
-    c("target_test_set", "feature_sets_to_plot_for_sample_size", "output_dir")
+    c(
+      "target_test_set",
+      "feature_sets_to_plot_for_sample_size",
+      "output_dir",
+      "main_power_law_asymptotes"
+    )
   ))
   
   gc()

@@ -84,9 +84,9 @@ higher_n_results <- higher_n_results %>%
 results <- bind_rows(lower_n_results, higher_n_results)
 rm(lower_n_results, higher_n_results)
 
-# Filter to just three feature sets (we are holding the fourth back as an informal "holdout")
+# Filter to the desired feature sets
 results <- results %>%
-  filter(feature_set %in% c("without_leakage", "prefer_official_train", "ego_AS"))
+  filter(feature_set %in% feature_sets_to_plot_for_sample_size)
 
 # Build column names dynamically
 estimate_col <- paste0("estimate_", my_metric)

@@ -149,6 +149,20 @@ run_metric <- function(my_metric) {
     )
   })
   
+  # Save R2 asymptotes for comparison with sensitivity analysis
+  if (my_metric == "R2_Holdout") {
+    main_power_law_asymptotes <- setNames(
+      as.numeric(coef_table$c),
+      coef_table$feature_set
+    )
+    
+    assign(
+      "main_power_law_asymptotes",
+      main_power_law_asymptotes,
+      envir = .GlobalEnv
+    )
+  }
+  
   # Set the order for the legend
   data_for_plot <- data_for_plot %>%
     mutate(

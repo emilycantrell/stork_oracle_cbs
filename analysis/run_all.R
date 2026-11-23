@@ -8,13 +8,13 @@ library(groundhog)
 # below and it will override the default in all scripts.
 # Note: we have not tested the official_holdout_set and AS_FS option yet since 
 # we will not examine holdout results until after reviewer feedback.
-target_test_set <- "evaluation_test_50_percent_split"
-feature_sets_to_plot_for_sample_size <- 
-  c("without_leakage", "prefer_official_train", "ego_AS")
+#target_test_set <- "evaluation_test_50_percent_split"
+#feature_sets_to_plot_for_sample_size <- 
+#  c("without_leakage", "prefer_official_train", "ego_AS")
 # or
-# target_test_set <- "official_holdout_set"
-# feature_sets_to_plot_for_sample_size <- 
-#   c("without_leakage", "prefer_official_train", "AS_FS", "ego_AS")
+ target_test_set <- "official_holdout_set"
+ feature_sets_to_plot_for_sample_size <- 
+   c("without_leakage", "prefer_official_train", "AS_FS", "ego_AS")
 
 stopifnot(
   target_test_set %in% c(
@@ -81,7 +81,8 @@ file_names <- c(
   "fig_6_sample_size_feature_set_interdependence.R", 
   "appendix_feature_description.R",
   "appendix_baseline_plus_topics.R",
-  "appendix_family_demography.R"
+  "appendix_family_demography.R",
+  "appendix_learning_curve_sensitivity_analysis.R"
 )
 
 #### RUN ALL FILES ####

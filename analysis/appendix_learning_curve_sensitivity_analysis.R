@@ -104,7 +104,7 @@ flex_loss <- function(z, form, df) {
 # Multiple dispersed initial values mitigate local-minimum and starting-point
 # sensitivity in nonlinear optimization. Select the converged solution with
 # smallest residual sum of squares, then refine it with another optimizer.
-fit_flexible <- function(form, df) {
+fit_flexible <- function(form, df, pow) {
   c0 <- max(df$y) + .02
   c_start <- pmin(.95, pmax(.05, c(c0, c0 + .06)))
   # Starting grids vary the asymptote, gap, horizontal scale, and curvature.
@@ -112,11 +112,29 @@ fit_flexible <- function(form, df) {
   starts <- expand.grid(c = c_start, gap = c(.3, 2, 20, 200),
                         scale = c(.0001, .01, 1), d = c(.2, .6),
                         KEEP.OUT.ATTRS = FALSE)
+  # Add starts at the power-law limit of MMF4 (h -> 0, d = b, gap * h^d = A),
+  # computed from the fitted power law. Because MMF4 contains the power law as a
+  # limit, it should never fit worse than the power law. These starts are also
+  # kept as candidate solutions in their own right, even if the optimizer does
+  # not report convergence from them (as for the Weibull below).
+  n_grid <- nrow(starts)
+  pow_par <- stats::coef(pow)
+  pl_scale <- c(1e-12, 1e-16)
+  starts <- rbind(starts, data.frame(
+    c = unname(pow_par["c"]),
+    gap = -unname(pow_par["a"]) * 10000^(-unname(pow_par["b"])) /
+      pl_scale^unname(pow_par["b"]),
+    scale = pl_scale, d = unname(pow_par["b"])))
   best <- NULL
   success <- 0L
   for (i in seq_len(nrow(starts))) {
     s <- starts[i, ]
     z0 <- c(logit_safe(s$c), log(s$gap), log(s$scale), log(s$d))
+    if (i > n_grid) {
+      v0 <- flex_loss(z0, form, df)
+      if (is.finite(v0) && v0 < 1e99 && (is.null(best) || v0 < best$value))
+        best <- list(par = z0, value = v0)
+    }
     fit <- suppressWarnings(tryCatch(
       stats::optim(z0, flex_loss, form = form, df = df, method = "BFGS",
                    control = list(maxit = 2000, reltol = 1e-12)),
@@ -191,7 +209,7 @@ fit_weibull <- function(df, pow) {
   best_par <- z_pow
   best_sse <- weibull_loss(z_pow, df)
   successes <- 0L
-
+  
   # Fit from the power-law solution and from several positive shape values.
   # The power-law solution remains an explicit candidate even if optimizers
   # do not converge to a lower sum of squared errors.
@@ -210,7 +228,7 @@ fit_weibull <- function(df, pow) {
       best_par <- fit$par
     }
   }
-
+  
   # Report whether any Weibull optimization converged. The power-law-limit
   # candidate remains available even if every optimization attempt fails.
   list(predict = function(n) predict_weibull(best_par, n / 10000),
@@ -248,8 +266,8 @@ fit_other <- function(form, df) {
     start <- unlist(starts[i, ], use.names = TRUE)
     fit <- suppressWarnings(tryCatch(
       minpack.lm::nlsLM(formula, data = df, start = start,
-        lower = lower, upper = upper,
-        control = minpack.lm::nls.lm.control(maxiter = 500)),
+                        lower = lower, upper = upper,
+                        control = minpack.lm::nls.lm.control(maxiter = 500)),
       error = function(e) NULL))
     if (is.null(fit) || !isTRUE(fit$convInfo$isConv)) next
     value <- sum(stats::resid(fit)^2)
@@ -265,7 +283,7 @@ fit_other <- function(form, df) {
   # Return fitted quantities on the original n scale. The EXP3 gap/rate
   # coefficients are also retained for cancellation-free gap calculations.
   list(predict = function(n) as.numeric(stats::predict(best,
-            newdata = data.frame(n = n, x = n / 10000))),
+                                                       newdata = data.frame(n = n, x = n / 10000))),
        c = unname(pars["c"]), converged = TRUE, starts_converged = NA_integer_,
        extreme = length(near) > 0, bound_parameters = paste(near, collapse = ", "),
        gap = if (form == "EXP3") unname(pars["gap"]) else NA_real_,
@@ -280,15 +298,15 @@ results <- list(); diagnostics <- list(); lines <- list()
 for (feature in feature_sets) {
   df <- dplyr::filter(dat, feature_set == feature)
   pow <- minpack.lm::nlsLM(y ~ a * n^(-b) + c, data = df,
-      start = c(a = -.5, b = .5, c = .5),
-      control = minpack.lm::nls.lm.control(maxiter = 500))
+                           start = c(a = -.5, b = .5, c = .5),
+                           control = minpack.lm::nls.lm.control(maxiter = 500))
   if (!isTRUE(pow$convInfo$isConv)) stop("Power law failed: ", feature)
   for (form in forms) {
     fit <- if (form == "POW3") {
       list(predict = function(n) as.numeric(stats::predict(pow, newdata = data.frame(n=n))),
            c = unname(stats::coef(pow)["c"]), converged = TRUE,
            starts_converged = NA_integer_, extreme = FALSE)
-    } else if (form == "MMF4") fit_flexible(form, df) else if (form == "WBL4") fit_weibull(df, pow) else fit_other(form, df)
+    } else if (form == "MMF4") fit_flexible(form, df, pow) else if (form == "WBL4") fit_weibull(df, pow) else fit_other(form, df)
     p <- fit$predict
     c_est <- fit$c
     # Measure convergence as the percentage reduction in the gap between
@@ -316,7 +334,7 @@ for (feature in feature_sets) {
       # The resulting percentage is 100 * (1 - exp(-9 * rate)).
       # expm1 provides a numerically stable evaluation of this expression.
       gap_pct <- 100 * (-expm1(-9 * fit$rate))
-
+      
       # Record the absolute remaining gap at each endpoint to describe
       # how close the fitted curve is to its asymptote at those sample sizes.
       gap_at_10k <- fit$gap * exp(-fit$rate)
@@ -344,8 +362,8 @@ for (feature in feature_sets) {
       asymptote_diff <- c_est - unname(stats::coef(pow)["c"])
       pow_c <- unname(stats::coef(pow)["c"])
       pow_gap_closed <- 100 * (1 -
-        (pow_c - pow_prediction(100000)) /
-        (pow_c - pow_prediction(10000)))
+                                 (pow_c - pow_prediction(100000)) /
+                                 (pow_c - pow_prediction(10000)))
       gap_closed_diff_pp <- gap_pct - pow_gap_closed
     } else {
       max_curve_diff <- NA_real_
@@ -372,7 +390,7 @@ for (feature in feature_sets) {
     # Plot curves over the observed training-size range.
     grid <- exp(seq(log(min(df$n)), log(max(df$n)), length.out = 300))
     lines[[length(lines)+1L]] <- data.frame(feature_set=feature, form=form,
-                                             n=grid, fitted=p(grid))
+                                            n=grid, fitted=p(grid))
   }
 }
 comparison <- dplyr::bind_rows(results) %>%
@@ -440,7 +458,7 @@ table_df <- data.frame(
 # Match main-text table conventions: a title-case caption, a separate note,
 # and a label for cross-references in the manuscript.
 tex <- knitr::kable(table_df, format="latex", booktabs=TRUE, escape=FALSE,
-  caption="Sensitivity of Estimated Asymptotes and Convergence Rates to Learning-Curve Functional Form")
+                    caption="Sensitivity of Estimated Asymptotes and Convergence Rates to Learning-Curve Functional Form")
 # knitr places the caption above the tabular; append the explanatory note below
 # the tabular, inside the table environment.
 table_end <- "\\end{table}"
@@ -458,11 +476,11 @@ writeLines(tex, paste0(prefix, "_table.tex"))
 # orders of magnitude. Free y-scales preserve variation in each feature set.
 curve_df <- dplyr::bind_rows(lines) %>%
   dplyr::mutate(feature_label=factor(unname(feature_labels[feature_set]),
-                                       levels=unname(feature_labels[feature_sets])),
+                                     levels=unname(feature_labels[feature_sets])),
                 form=factor(form, levels=forms))
 points_df <- dplyr::filter(dat, feature_set %in% feature_sets) %>%
   dplyr::mutate(feature_label=factor(unname(feature_labels[feature_set]),
-                                       levels=unname(feature_labels[feature_sets])))
+                                     levels=unname(feature_labels[feature_sets])))
 p <- ggplot2::ggplot() +
   ggplot2::geom_point(data=points_df, ggplot2::aes(x=n,y=y), alpha=.35, size=1.1) +
   ggplot2::geom_line(data=curve_df,
@@ -476,8 +494,8 @@ p <- ggplot2::ggplot() +
   ggplot2::scale_linetype_manual(values = setNames(c("solid", "dashed", "dotdash", "dotted", "longdash"), forms),
                                  breaks = forms, labels = unname(form_labels[forms])) +
   ggplot2::labs(x="Training sample size (log scale)",
-       y=if (test_label=="validation_set") expression(R[Validation]^2) else expression(R[Holdout]^2),
-       color="Functional form", linetype="Functional form") +
+                y=if (test_label=="validation_set") expression(R[Validation]^2) else expression(R[Holdout]^2),
+                color="Functional form", linetype="Functional form") +
   ggplot2::theme_bw(base_size=12) +
   ggplot2::theme(
     legend.position = "bottom",
@@ -491,4 +509,3 @@ ggplot2::ggsave(paste0(prefix, "_plot.jpg"), p, width=9, height=9,
 print(p)
 print(comparison)
 message("Saved JPG, LaTeX table, results CSV, diagnostics CSV in: ", out_dir)
-

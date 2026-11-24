@@ -21,6 +21,7 @@ stopifnot(
     "evaluation_test_50_percent_split",
     "official_holdout_set"
   ) &
+  (
     identical(
       feature_sets_to_plot_for_sample_size,
       c("without_leakage", "prefer_official_train", "ego_AS")
@@ -29,6 +30,7 @@ stopifnot(
       feature_sets_to_plot_for_sample_size,
       c("without_leakage", "prefer_official_train", "AS_FS", "ego_AS")
     )
+  )
 )
 
 #### LOAD PACKAGES ####

@@ -142,15 +142,6 @@ for (my_metric in metrics_to_run) {
       # Filter results for the current feature set
       feature_data <- results %>%
         filter(feature_set == feature_i)
-    
-      # Create 4 additional copies of 10k results so that all points ≤ 10k are weighted equally
-      # since all the smaller sample sizes appear 5 times but 10k results only appear 1 time
-      feature_data <- feature_data %>%
-        bind_rows(
-          feature_data %>%
-            filter(n_training_set == 10000) %>%
-            slice_sample(n = 4, replace = TRUE)
-        )
       
       # Select only points where training sample size ≤ 10000 for fitting
       training_data <- feature_data %>% 

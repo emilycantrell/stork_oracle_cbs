@@ -180,13 +180,52 @@ for (my_metric in metrics_to_run) {
                                 "Accuracy" = c(a = -0.5, b = 0.5, c = 0.85))
       
       # Fit the learning curve
-      fit_nlsLM <- try(nlsLM(scaling_formula,
-                             start = starting_points,
-                             data = training_data,
-                             control = nls.lm.control(maxiter = 500)))
-    
+      fit_scaling_law <- function(start) {
+        nlsLM(
+          scaling_formula,
+          start = start,
+          data = training_data,
+          control = nls.lm.control(maxiter = 500)
+        )
+      }
+
+      fit_nlsLM <- tryCatch(
+        fit_scaling_law(starting_points),
+        error = function(e) NULL
+      )
+
+      # If the original starting values fail, retry with data-driven starting values
+      # calculated using only observations at n <= 10,000
+      if (is.null(fit_nlsLM)) {
+        message("Default starting values failed. Using data-driven start for: ",
+                my_metric, ", seed ", main_seed, ", feature set ", feature_i)
+        td <- training_data %>% arrange(n_training_set)
+        y_first <- first(td$estimate_metric)
+        y_last  <- last(td$estimate_metric)
+        n_first <- first(td$n_training_set)
+        fallback_start <- c(a = (y_first - y_last) * n_first^0.5, b = 0.5, c = y_last)
+        
+        fit_nlsLM <- tryCatch(
+          fit_scaling_law(fallback_start),
+          error = function(e) {
+            stop(
+              "Learning curve fit failed!\n",
+              "Metric: ", my_metric, "\n",
+              "Main seed: ", main_seed, "\n",
+              "Feature set: ", feature_i, "\n",
+              "Number of training observations: ", nrow(training_data), "\n",
+              "Original error: ", conditionMessage(e),
+              call. = FALSE
+            )
+          }
+        )
+      }
+      
       # Predict for all points
-      feature_data$predicted <- predict(fit_nlsLM, newdata = feature_data)
+      feature_data$predicted <- predict(
+        fit_nlsLM,
+        newdata = feature_data
+      )
       
       # Document the seed number
       feature_data <- feature_data %>%
